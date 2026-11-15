@@ -1,0 +1,163 @@
+# Neutral generic DomainProfile example for tome_distill.
+# Replace domain-specific lists (protected_chars, sources, taxonomy_tree, probes, etc.)
+# in your own project profile file without modifying engine source code.
+
+profile_meta:
+  dialect: "generic"
+  schema_version: "1.0"
+  target_tables:
+    - "grammar_and_function_words"
+    - "lexicon_and_orthography"
+    - "idioms_and_proverbs"
+  taxonomy_tree:
+    G1:
+      name: "Morphology & Affixes"
+      children:
+        G1.1:
+          name: "Reduplication & Derivation"
+          scope: "Morphological reduplication and affixation rules"
+    G2:
+      name: "Nominals & Reference"
+      children:
+        G2.1:
+          name: "Pronouns & Demonstratives"
+          scope: "Personal, demonstrative, and interrogative pronouns"
+    G3:
+      name: "Predicate, Aspect & Modality"
+      children:
+        G3.1:
+          name: "Aspect & Sentence-Final Particles"
+          scope: "Aspectual markers, clause-final particles, and grammatical constraints"
+
+sources:
+  canonical_docs: []
+  pdf_glob_patterns: {}
+  reprocessed_files: {}
+  isolated_eval_paths: []
+
+text_normalization:
+  opencc_config: "t2s"
+  protected_chars: []
+  compat_char_aliases: {}
+  ocr_suspect_chars: []
+  inline_note_cues:
+    - name: "inline_gloss_parens"
+      pattern: "[（(〔\\[].{1,25}[）)〕\\]]"
+    - name: "inline_gloss_metaphor"
+      pattern: "比喻"
+  meta_leak_patterns:
+    - name: "page_ref_latin"
+      pattern: "\\bp\\.\\s*\\d+"
+      ignore_case: true
+    - name: "page_ref_cjk"
+      pattern: "第\\s*\\d+\\s*页"
+    - name: "meta_this_card"
+      pattern: "本卡"
+    - name: "meta_this_section"
+      pattern: "本节"
+    - name: "meta_not_listed_separately"
+      pattern: "原书未单列"
+    - name: "meta_original_book"
+      pattern: "原书"
+    - name: "meta_unicode_codepoint"
+      pattern: "U\\+[0-9A-Fa-f]{4,6}"
+  crossref_arrow_pattern: "⇨\\s*〖([^〗]+)〗"
+  circled_chars: "①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳"
+  etymon_note_pattern: "(?:本字(?:当|应|宜|实)?(?:作|为|是)|正字(?:当|应)?作|俗(?:常)?(?:作|写|误作)|借字|训读字|同音借用)"
+  false_friend_pattern: "(?:≠|不等于|望文生义|不同于|字面.*误解)"
+  hard_ban_pattern: "(?:不可说|不能说|严禁|切忌直译|忌用|不合语法|病句|误说|\\*)"
+
+pdf_render:
+  dpi: 150
+  header_dpi: 160
+  crop_dpi: 165
+  max_img_bytes: 215000
+  max_crop_bytes: 145000
+  bleach_threshold: 224
+  header_norm_box: [0.035, 0.030, 0.965, 0.102]
+  preset_norm_boxes:
+    full: [0.02, 0.02, 0.98, 0.98]
+    left: [0.01, 0.02, 0.53, 0.98]
+    right: [0.47, 0.02, 0.99, 0.98]
+    top: [0.02, 0.02, 0.98, 0.54]
+    bot: [0.02, 0.46, 0.98, 0.98]
+    lt: [0.01, 0.02, 0.53, 0.55]
+    lb: [0.01, 0.45, 0.53, 0.98]
+    rt: [0.47, 0.02, 0.99, 0.55]
+    rb: [0.47, 0.45, 0.99, 0.98]
+  strip_width: 1040
+  tag_width: 108
+  max_strips_per_sheet: 15
+  scale_steps: [1.0, 0.90, 0.80, 0.72, 0.64, 0.56]
+  jpeg_qualities: [78, 70, 62, 56, 48, 42]
+  min_dim: 200
+  font_paths: []
+
+layout_adapter:
+  adapter_type: "double_column_dict"
+  page_delimiter: "-----"
+  column_gutter_min_gap: 0.05
+  index_section_hints: {}
+  onset_compat_rules: {}
+  max_page_range_span: 50
+
+compiler:
+  stage2a_max_meaning_len: 28
+  stage2a_max_usage_len: 20
+  cross_source_min_jaccard: 0.35
+  compact_tier_limits:
+    T1_general_lexicon: 50
+    T1_median: 35
+    T2_special_or_idiom: 100
+    T3_grammar_and_redline: 260
+    T3_hub_max: 300
+    hub_min_source_cards: 6
+  dual_class_overrides: {}
+  extra_fw_overrides: {}
+  vocab_merge_targets: {}
+  conflict_specs_path: ""
+  regression_guards_path: ""
+  category_labels:
+    noun: "名词"
+    verb: "动词"
+    adjective: "形容词"
+    time: "时间词"
+    place: "处所词"
+    idiom: "熟语"
+    proverb: "俗谚"
+  polysemy_regex: "[①②③④⑤⑥⑦⑧⑨⑩⑴⑵⑶⑷⑸]|(?<!\\d)[1234]\\s*[.、．]"
+  variant_prose_regex: "(?:亦作|又作|或作|又写|亦写|本字|正字|俗作|俗写|借字|训读|同音借|参见)"
+  encyclopedic_regex: "(?:植物|动物|昆虫|草本|木本|学名|科属|症状|病症|传统小吃)"
+  prosody_contrast_regex: "(?:轻读|重读|轻音|重音|连调|变调不同|文读.*白读|白读.*文读)"
+  special_register_regex: "(?:詈词|骂人|讳称|忌讳|婉称|黑话|隐语|谑称|贬称)"
+
+gates:
+  min_blind_audit_count: 600
+  min_blind_audit_ratio: 0.05
+  target_sample_count: 660
+  target_sample_ratio: 0.055
+  qa_spotcheck_ratio: 0.05
+  qa_min_per_doc: 3
+  closed_class_regex_chars: ""
+  bare_noun_blacklist: []
+  probe_suite_path: ""
+  max_regex_open_char_class: 3
+  max_regex_open_alts: 4
+  visual_trigger_docs: []
+  visual_trigger_markers: ["△", "‖", "□"]
+  speculative_drift_terms: []
+
+retriever:
+  strategy: "budgeted"  # Options: "budgeted" | "longest" | "full"
+  max_cards: 12
+  max_chars_compact: 1800
+  max_chars_json: 3500
+  lex_reserve: 3
+  per_lex_est_compact: 70
+  per_lex_est_json: 250
+  max_slots_per_fw: 2
+  max_slots_per_leaf: 3
+  open_class_1char_stop: []
+  target_2char_stopwords: []
+  defer_1char_gram: []
+  enclitic_tail_exempt: []

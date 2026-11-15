@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "tome-distill"
+version = "0.1.0"
+description = "Post-OCR layout verification, incremental proofreading, multi-source compilation, and budgeted retrieval for complex reference books, dictionaries, and rule manuals."
+readme = "README.md"
+license = { text = "Apache-2.0" }
+requires-python = ">=3.11"
+dependencies = [
+    "PyYAML>=6.0",
+    "opencc-python-reimplemented>=0.1.7",
+]
+
+[project.optional-dependencies]
+pdf = [
+    "pypdfium2>=4.30.0",
+    "pillow>=10.0.0",
+    "numpy>=1.26.0",
+]
+ocr = [
+    "rapidocr-onnxruntime>=1.3.0",
+    "opencv-python-headless>=4.8.0",
+]
+compounds = [
+    "jieba>=0.42.1",
+]
+all = [
+    "tome-distill[pdf,ocr,compounds]",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
